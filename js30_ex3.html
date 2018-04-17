@@ -7,6 +7,7 @@
     :root {
       --spacing: 0px;
       --base: #3A0E71;
+      --baseborder: var(--base);
       --opacity: 100;
       --grayscale: 0;
       --sepia: 0;
@@ -64,6 +65,7 @@
       box-sizing: border-box;
       opacity: calc(0 + var(--opacity)/100);
       -webkit-filter: grayscale(var(--grayscale)) sepia(var(--sepia)) blur(var(--blur)) saturate(var(--saturate)) contrast(var(--contrast)) brightness(var(--brightness)) hue-rotate(var(--huerotation));
+      background-image: linear-gradient(var(--gradientangle), var(--gradientcolorone) var(--gradientpositionone), var(--gradientcolortwo) var(--gradientpositiontwo)), url('https://images.unsplash.com/photo-1504317083653-6843c8aa144f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=066700ab4153be22d484d37ec8be9711&auto=format&fit=crop&w=1489positiontwo');
     }
     .tools {
       position: absolute;
@@ -161,18 +163,18 @@
     <div id="popup-extract">
       <p>IMAGE CONTAINER CSS :</p>
       <p>#image-holder {</br>
-        &ensp;&ensp;background-color:<span id="css--base"></span>;</br>
+        &ensp;&ensp;background-color:<span id="--base"></span>;</br>
         &ensp;&ensp;background-position: center center;</br>
         &ensp;&ensp;background-size: cover;</br>
         &ensp;&ensp;background-repeat: no-repeat;</br>
-        &ensp;&ensp;border: var(--spacing) solid var(--base);</br>
+        &ensp;&ensp;border: <span id="--spacing"></span> solid <span id="--baseborder"></span>;</br>
         &ensp;&ensp;box-sizing: border-box;</br>
-        &ensp;&ensp;opacity: calc(0 + var(--opacity)/100);</br>
-        &ensp;&ensp;-webkit-filter: grayscale(var(--grayscale)) sepia(var(--sepia)) blur(var(--blur)) saturate(var(--saturate)) contrast(var(--contrast)) brightness(var(--brightness)) hue-rotate(
-        var(--huerotation));</br>
+        &ensp;&ensp;opacity: <span id="--opacity"></span>;</br>
+        &ensp;&ensp;-webkit-filter: grayscale(<span id="--grayscale"></span>) sepia(<span id="--sepia"></span>) blur(<span id="--blur"></span>) saturate(<span id="--saturate"></span>) contrast(<span id="--contrast"></span>) brightness(<span id="--brightness"></span>) &ensp;&ensp;hue-rotate(<span id="--huerotation"></span>);</br>
+        &ensp;&ensp;background-image: linear-gradient(<span id="--gradientangle"></span>, <span id="--gradientcolorone"></span> <span id="--gradientpositionone"></span>, <span id="--gradientcolortwo"></span> <span id="--gradientpositiontwo"></span>), url('<span id="--image"></span>');
       }</p>
     </div>
-    <div id="image-holder" style="background-image: linear-gradient(var(--gradientangle), var(--gradientcolorone) var(--gradientpositionone), var(--gradientcolortwo) var(--gradientpositiontwo)), url('https://images.unsplash.com/photo-1504317083653-6843c8aa144f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=066700ab4153be22d484d37ec8be9711&auto=format&fit=crop&w=1489positiontwo')">
+    <div id="image-holder">
     </div>
     <div class="tools">
       <div class="toolbar">
@@ -291,16 +293,30 @@
                             ["--gradientpositionone", "0%"],
                             ["--gradientcolortwoalpha", "0"],
                             ["--gradientpositiontwo", "50%"]]
+      const initializerColor = [["--gradientcolorone", "rgba(225,39,135,0)"],
+                                ["--gradientcolortwo", "rgba(21,192,183,0)"]]
       InitR();
       InitL();
 
+      var initializers = [].concat(...[initializerL, initializerR, initializerColor]);
+      console.log(initializers);
       const properties = {};
 
-      initializerL.forEach( initializer => {
-        // console.log(initializer);
-        properties[initializer[0]] = initializer[1];
-      })
+      //CSS
+      const btnCSS = document.getElementById('btn-css');
 
+      btnCSS.addEventListener('click',extractCSS);
+
+      function extractCSS(){
+        initializers.forEach(initializer => {
+          properties[initializer[0]] = document.documentElement.style.getPropertyValue(initializer[0]);
+          console.log(properties[initializer[0]] + "/" + initializer[1]);
+          if(properties[initializer[0]] == initializer[1]) {
+            document.getElementById(initializer[0]).textContent = properties[initializer[0]];
+          }
+        })
+      }
+      extractCSS();
 
       //RANGES
 
@@ -405,15 +421,6 @@
         toolbars.forEach(toolbar => toolbar.style.backgroundColor = "transparent");
         toolbarsHorizontal.forEach(toolbar => toolbar.style.backgroundColor = "transparent");
         toolInputs.forEach(toolinput => toolinput.style.backgroundColor = "#0000004d")
-      }
-
-      //CSS
-      const btnCSS = document.getElementById('btn-css');
-
-      btnCSS.addEventListener('click',extractCSS);
-
-      function extractCSS(){
-        // background-color: var(--base);
       }
     });
 
