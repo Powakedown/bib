@@ -9,6 +9,7 @@
       --base: #3A0E71;
       --baseborder: var(--base);
       --opacity: 100;
+      --opacity-float: calc(var(--opacity-decimal) / 100);
       --grayscale: 0;
       --sepia: 0;
       --blur: 0px;
@@ -43,15 +44,18 @@
       height: 500px;
       width: 700px;
       border-radius: 4px;
-      padding: 20px;
+      box-sizing: border-box;
+      padding: 40px;
       background-color: #fff;
       box-shadow: 3px 8px rgba(0,0,0,0.2);
       position: absolute;
       z-index: 100;
-      color: gray;
     }
     #popup-extract p {
       margin-top: 0;
+      font-family: monospace;
+      line-height: 25px;
+      color: black;
     }
     #image-holder {
       background-color: var(--base);
@@ -89,10 +93,6 @@
       padding: 5px;
       width: calc(100% - 380px);
       box-sizing: border-box;
-    }
-    .palette {
-      width: 125px;
-      height: 50px;
     }
     .tool, .tool-color, .tool-alpha {
       width: 100%;
@@ -140,7 +140,9 @@
       -webkit-appearance: listbox;
       background-color: #0000004d;
       border: none;
-      width: 145px;
+      width: 100px;
+      height: 38px;
+      border-radius: 4px;
     }
     input[type="text"] {
       background-color: #0000004d;
@@ -156,24 +158,47 @@
       box-sizing: border-box;
       float: left;
     }
+    #popup-extract .p-style {
+      display: none;
+    }
+    .p-style span {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="page-parent">
-    <div id="popup-extract">
+<!--     <div id="popup-extract">
       <p>IMAGE CONTAINER CSS :</p>
       <p>#image-holder {</br>
-        &ensp;&ensp;background-color:<span id="--base"></span>;</br>
+        &ensp;&ensp;box-sizing: border-box;</br>
         &ensp;&ensp;background-position: center center;</br>
         &ensp;&ensp;background-size: cover;</br>
         &ensp;&ensp;background-repeat: no-repeat;</br>
-        &ensp;&ensp;border: <span id="--spacing"></span> solid <span id="--baseborder"></span>;</br>
-        &ensp;&ensp;box-sizing: border-box;</br>
-        &ensp;&ensp;opacity: <span id="--opacity"></span>;</br>
-        &ensp;&ensp;-webkit-filter: grayscale(<span id="--grayscale"></span>) sepia(<span id="--sepia"></span>) blur(<span id="--blur"></span>) saturate(<span id="--saturate"></span>) contrast(<span id="--contrast"></span>) brightness(<span id="--brightness"></span>) &ensp;&ensp;hue-rotate(<span id="--huerotation"></span>);</br>
-        &ensp;&ensp;background-image: linear-gradient(<span id="--gradientangle"></span>, <span id="--gradientcolorone"></span> <span id="--gradientpositionone"></span>, <span id="--gradientcolortwo"></span> <span id="--gradientpositiontwo"></span>), url('<span id="--image"></span>');
+        <span class="p-base">
+          &ensp;&ensp;background-color: <span class="c-base"><span id="--base">#3A0E71</span></span>;</br>
+        </span>
+        <span class="p-style p-border">
+          &ensp;&ensp;border: <span class="c-spacing"><span id="--spacing"></span></span> solid <span id="--baseborder"></span>;</br>
+        </span>
+        <span class="p-style p-opacity">
+          &ensp;&ensp;opacity: <span class="opacity"><span id="--opacity"></span></span>;</br>
+        </span>
+        <span class="p-style p-grayscale p-sepia p-blur p-saturate p-contrast p-brightness p-hue-rotate">
+          &ensp;&ensp;-webkit-filter: <span class="c-grayscale">(<span id="--grayscale"></span>)</span>
+                                      <span class="c-sepia">sepia(<span id="--sepia"></span>)</span>
+                                      <span class="c-blur">blur(<span id="--blur"></span>)</span>
+                                      <span class="c-saturate">saturate(<span id="--saturate"></span>)</span>
+                                      <span class="c-contrast">contrast(<span id="--contrast"></span>)</span>
+                                      <span class="c-brightness">brightness(<span id="--brightness"></span>)</span>
+                                      <span class="c-hue-rotate">hue-rotate(<span id="--huerotation"></span>)</span>;
+                                      </br>
+        </span>
+        <span class="p-style">
+          &ensp;&ensp;background-image: linear-gradient(<span id="--gradientangle"></span>, <span id="--gradientcolorone"></span> <span id="--gradientpositionone"></span>, <span id="--gradientcolortwo"></span> <span id="--gradientpositiontwo"></span>), url('<span id="--image"></span>');
+        </span>
       }</p>
-    </div>
+    </div> -->
     <div id="image-holder">
     </div>
     <div class="tools">
@@ -185,7 +210,7 @@
           <div class="button" id="btn-css">css</div>
         </div>
         <div class="tool">
-          <div><label for="sizing">border</label></div>
+          <div><label for="spacing">border</label></div>
           <input type="range" id="spacing" name="spacing" min="0" max="200" value="0" data-sizing="px">
         </div>
         <div class="tool">
@@ -194,6 +219,7 @@
         </div>
         <div class="tool toolbig">
           <div><label for="base">background-color</label></div>
+          <div class="button" id="btn-delete-bgi">X</div>
           <input type="color" id="base" name="base" value="#3A0E71" class="palette" >
         </div>
         <div class="tool">
@@ -295,31 +321,45 @@
                             ["--gradientpositiontwo", "50%"]]
       const initializerColor = [["--gradientcolorone", "rgba(225,39,135,0)"],
                                 ["--gradientcolortwo", "rgba(21,192,183,0)"]]
+
       InitR();
       InitL();
 
       var initializers = [].concat(...[initializerL, initializerR, initializerColor]);
-      console.log(initializers);
       const properties = {};
 
       //CSS
       const btnCSS = document.getElementById('btn-css');
 
-      btnCSS.addEventListener('click',extractCSS);
-
       function extractCSS(){
         initializers.forEach(initializer => {
           properties[initializer[0]] = document.documentElement.style.getPropertyValue(initializer[0]);
-          console.log(properties[initializer[0]] + "/" + initializer[1]);
-          if(properties[initializer[0]] == initializer[1]) {
+          if(properties[initializer[0]] != initializer[1]) {
+            console.log(initializer[0].replace("--",".p-"));
+            document.querySelector(initializer[0].replace("--",".p-")).style.display = "inline";
+            document.querySelector(initializer[0].replace("--",".c-")).style.display = "inline";
+            document.getElementById(initializer[0]).style.display = "inline";
             document.getElementById(initializer[0]).textContent = properties[initializer[0]];
           }
         })
+
+
+        // initializers.forEach(initializer => {
+        //     if(properties[initializer[0]] != initializer[1]) {
+        //       console.log("update " + initializer[0]);
+        //       document.getElementById(initializer[0]).textContent = properties[initializer[0]];
+        //     }
+        //     else {
+        //       console.log("no update " + initializer[0]);
+        //       console.log(document.getElementById(initializer[0]));
+        //       document.getElementById(initializer[0]).remove();
+        //     }
+        //   }
+        // })
       }
-      extractCSS();
 
+      btnCSS.addEventListener('click',extractCSS);
       //RANGES
-
       function handleUpdate(){
         const suffix = this.dataset.sizing || '';
         document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
