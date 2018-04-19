@@ -64,12 +64,14 @@
       box-shadow: 3px 8px rgba(0,0,0,0.2);
       position: absolute;
       z-index: 100;
+      word-wrap: break-word;
     }
     #popup-extract p {
       margin: 2px;
       font-family: monospace;
       line-height: 25px;
       color: black;
+
     }
     #popup-extract .p-style {
       display: none;
@@ -215,16 +217,16 @@
                                       <span class="c-hue-rotate">hue-rotate(<span id="--huerotation"></span>)</span>;</p>
         </span>
         <span class="p-image">
-        <p>&ensp;&ensp;background-image:  <span class="p-style p-image p-gradientangle p-gradientcolorone p-gradientcolortwo p-gradientangle p-gradientpositionone p-gradientpositiontwo">
-                                            <span class="c-gradientangle c-gradientcolorone c-gradientcolortwo c-gradientangle c-gradientpositionone c-gradientpositiontwo">
-                                              linear-gradient(<label id="--gradientangle">0deg</label>,
-                                                              <label id="--gradientcolorone">rgba(225,39,135,0)</label>
-                                                              <label id="--gradientpositionone">0%</label>,
-                                                              <label id="--gradientcolortwo">rgba(21,192,183,0)</label>
-                                                              <label id="--gradientpositiontwo">50%</label>),
-                                            </span>
+        <p>&ensp;&ensp;background-image:<span class="p-style p-gradientangle p-gradientcolorone p-gradientcolortwo p-gradientangle p-gradientpositionone p-gradientpositiontwo">
+                                          <span class="c-gradientangle c-gradientcolorone c-gradientcolortwo c-gradientangle c-gradientpositionone c-gradientpositiontwo">
+                                            linear-gradient(<label id="--gradientangle">0deg</label>,
+                                                            <label id="--gradientcolorone">rgba(225,39,135,0)</label>
+                                                            <label id="--gradientpositionone">0%</label>,
+                                                            <label id="--gradientcolortwo">rgba(21,192,183,0)</label>
+                                                            <label id="--gradientpositiontwo">50%</label>),
                                           </span>
-                                          <span class="c-image">url('<span id="--image"></span>');</span>
+                                        </span>
+                                        <span class="c-image">url('<span id="--image"></span>');</span>
         </p></span>
         <p>}</p>
       </div>
@@ -330,6 +332,7 @@
       const inputsL = []
 
       const initializerL = [["--base", "#CCFF00"],
+                            ["--image", imageDefault],
                             ["--opacity", "100"],
                             ["--grayscale", "0%"],
                             ["--sepia", "0%"],
@@ -342,8 +345,7 @@
                             ["--gradientcoloronealpha", "0"],
                             ["--gradientpositionone", "0%"],
                             ["--gradientcolortwoalpha", "0"],
-                            ["--gradientpositiontwo", "50%"],
-                            ["--image", imageDefault ]]
+                            ["--gradientpositiontwo", "50%"]]
       const initializerRForExtraction = [["--gradientcolorone", "rgba(225,39,135,0)"],
                                         ["--gradientcolortwo", "rgba(21,192,183,0)"],
                                         ["--gradientangle", "0deg"],
@@ -362,7 +364,7 @@
       const wrapperCss = document.getElementById('popup-wrapper');
       const btnCssClose = document.getElementById('btn-css-close');
 
-      btnCss.addEventListener('click',extractCss);
+      btnCss.addEventListener('click', extractCss);
       wrapperCss.addEventListener('click', closeCss);
       btnCssClose.addEventListener('click', closeCss);
 
@@ -482,7 +484,8 @@
       const extractCssImage = document.getElementById("--image")
 
       function updateImage(){
-        imageHolder.style.backgroundImage =  imagePrefix + "url('" + inputImage.value + "')";
+        imageHolder.style.backgroundImage = imagePrefix + "url('" + inputImage.value + "')";
+        document.documentElement.style.setProperty('--image', inputImage.value );
       }
 
       function InitImage() {
