@@ -5,11 +5,11 @@
   <title>JS30-3</title>
   <style>
     :root {
-      --spacing: 0px;
       --base: #3A0E71;
       --baseborder: var(--base);
       --opacity: 100;
       --opacity-float: calc(var(--opacity-decimal) / 100);
+      --image: "";
       --grayscale: 0;
       --sepia: 0;
       --blur: 0px;
@@ -40,7 +40,21 @@
       box-sizing: border-box;
       background-color: var(--base);
     }
+    #popup-wrapper {
+      display: none;
+      position: absolute;
+      z-index: 500;
+      background-color: rgba(0,0,0,0.5);
+      width: 100%;
+      height: 100vh;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      justify-content: center;
+      align-items: center;
+    }
     #popup-extract {
+      z-index: 499;
       height: 500px;
       width: 700px;
       border-radius: 4px;
@@ -52,20 +66,27 @@
       z-index: 100;
     }
     #popup-extract p {
-      margin-top: 0;
+      margin: 2px;
       font-family: monospace;
       line-height: 25px;
       color: black;
+    }
+    #popup-extract .p-style {
+      display: none;
+    }
+    .p-style span {
+      display: none;
+    }
+    .p-eraser {
+      display: none !important;
     }
     #image-holder {
       background-color: var(--base);
       background-position: center center;
       background-size: cover;
       background-repeat: no-repeat;
-      padding: 0;
       height: 100vh;
       width: 100%;
-      border: var(--spacing) solid var(--base) ;
       box-sizing: border-box;
       opacity: calc(0 + var(--opacity)/100);
       -webkit-filter: grayscale(var(--grayscale)) sepia(var(--sepia)) blur(var(--blur)) saturate(var(--saturate)) contrast(var(--contrast)) brightness(var(--brightness)) hue-rotate(var(--huerotation));
@@ -120,6 +141,11 @@
       background-color: #fff;
       transform: scale(1.1);
     }
+    .button-close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
     .pastille {
       width: 45px;
       height: 45px;
@@ -158,47 +184,51 @@
       box-sizing: border-box;
       float: left;
     }
-    #popup-extract .p-style {
-      display: none;
-    }
-    .p-style span {
-      display: none;
-    }
   </style>
 </head>
 <body>
   <div class="page-parent">
-<!--     <div id="popup-extract">
-      <p>IMAGE CONTAINER CSS :</p>
-      <p>#image-holder {</br>
-        &ensp;&ensp;box-sizing: border-box;</br>
-        &ensp;&ensp;background-position: center center;</br>
-        &ensp;&ensp;background-size: cover;</br>
-        &ensp;&ensp;background-repeat: no-repeat;</br>
-        <span class="p-base">
-          &ensp;&ensp;background-color: <span class="c-base"><span id="--base">#3A0E71</span></span>;</br>
-        </span>
-        <span class="p-style p-border">
-          &ensp;&ensp;border: <span class="c-spacing"><span id="--spacing"></span></span> solid <span id="--baseborder"></span>;</br>
+    <div id="popup-wrapper">
+      <div id="popup-extract">
+        <div class="button button-close" id="btn-css-close">X</div>
+        <p>IMAGE CONTAINER CSS :</p>
+        <p>#image-holder {<p>
+        <p>&ensp;&ensp;height: 100vh;</p>
+        <p>&ensp;&ensp;width: 100%;</p>
+        <p>&ensp;&ensp;box-sizing: border-box;</p>
+        <p>&ensp;&ensp;background-position: center center;</p>
+        <p>&ensp;&ensp;background-size: cover;</p>
+        <p>&ensp;&ensp;background-repeat: no-repeat;</p>
+        <span class="p-style p-base">
+          <p>&ensp;&ensp;background-color: <span class="c-base"><span id="--base"></span></span>;</p>
         </span>
         <span class="p-style p-opacity">
-          &ensp;&ensp;opacity: <span class="opacity"><span id="--opacity"></span></span>;</br>
+          <p>&ensp;&ensp;opacity: <span class="c-opacity"><span id="--opacity"></span></span>;</p>
         </span>
         <span class="p-style p-grayscale p-sepia p-blur p-saturate p-contrast p-brightness p-hue-rotate">
-          &ensp;&ensp;-webkit-filter: <span class="c-grayscale">(<span id="--grayscale"></span>)</span>
+          <p>&ensp;&ensp;-webkit-filter: <span class="c-grayscale">grayscale(<span id="--grayscale"></span>)</span>
                                       <span class="c-sepia">sepia(<span id="--sepia"></span>)</span>
                                       <span class="c-blur">blur(<span id="--blur"></span>)</span>
                                       <span class="c-saturate">saturate(<span id="--saturate"></span>)</span>
                                       <span class="c-contrast">contrast(<span id="--contrast"></span>)</span>
                                       <span class="c-brightness">brightness(<span id="--brightness"></span>)</span>
-                                      <span class="c-hue-rotate">hue-rotate(<span id="--huerotation"></span>)</span>;
-                                      </br>
+                                      <span class="c-hue-rotate">hue-rotate(<span id="--huerotation"></span>)</span>;</p>
         </span>
-        <span class="p-style">
-          &ensp;&ensp;background-image: linear-gradient(<span id="--gradientangle"></span>, <span id="--gradientcolorone"></span> <span id="--gradientpositionone"></span>, <span id="--gradientcolortwo"></span> <span id="--gradientpositiontwo"></span>), url('<span id="--image"></span>');
-        </span>
-      }</p>
-    </div> -->
+        <span class="p-image">
+        <p>&ensp;&ensp;background-image:  <span class="p-style p-image p-gradientangle p-gradientcolorone p-gradientcolortwo p-gradientangle p-gradientpositionone p-gradientpositiontwo">
+                                            <span class="c-gradientangle c-gradientcolorone c-gradientcolortwo c-gradientangle c-gradientpositionone c-gradientpositiontwo">
+                                              linear-gradient(<label id="--gradientangle">0deg</label>,
+                                                              <label id="--gradientcolorone">rgba(225,39,135,0)</label>
+                                                              <label id="--gradientpositionone">0%</label>,
+                                                              <label id="--gradientcolortwo">rgba(21,192,183,0)</label>
+                                                              <label id="--gradientpositiontwo">50%</label>),
+                                            </span>
+                                          </span>
+                                          <span class="c-image">url('<span id="--image"></span>');</span>
+        </p></span>
+        <p>}</p>
+      </div>
+    </div>
     <div id="image-holder">
     </div>
     <div class="tools">
@@ -210,16 +240,13 @@
           <div class="button" id="btn-css">css</div>
         </div>
         <div class="tool">
-          <div><label for="spacing">border</label></div>
-          <input type="range" id="spacing" name="spacing" min="0" max="200" value="0" data-sizing="px">
-        </div>
-        <div class="tool">
           <div><label for="opacity">opacity</label></div>
           <input type="range" id="opacity" name="opacity" min="0" max="100" value="100">
         </div>
         <div class="tool toolbig">
           <div><label for="base">background-color</label></div>
-          <div class="button" id="btn-delete-bgi">X</div>
+          <div class="button" id="btn-add-bgc" style="display: none">add</div>
+          <div class="button" id="btn-delete-bgc">X</div>
           <input type="color" id="base" name="base" value="#3A0E71" class="palette" >
         </div>
         <div class="tool">
@@ -254,7 +281,7 @@
 
       <div class="toolbar-horizontal">
         <div class="button" id="input-image-btn">X</div>
-        <input type="text" id="input-image" placeholder="image url" onkeydown="updateImage()" value="https://images.unsplash.com/photo-1504317083653-6843c8aa144f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=066700ab4153be22d484d37ec8be9711&auto=format&fit=crop&w=1489&q=80" >
+        <input type="text" id="image" placeholder="image url" onkeydown="updateImage()" value="https://images.unsplash.com/photo-1504317083653-6843c8aa144f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=066700ab4153be22d484d37ec8be9711&auto=format&fit=crop&w=1489&q=80" >
       </div>
 
       <div class="toolbar">
@@ -272,7 +299,7 @@
           <div><label for="gradientpositionone">color one position</label></div>
           <input type="range" id="gradientpositionone" name="gradientpositionone" min="0" max="100" value="0" data-sizing="%">
         </div>
-        <div class="tool tool-alpha">
+        <div class="tool-alpha">
           <div><label for="gradientcoloronealpha">color one alpha</label></div>
           <input type="range" id="gradientcoloronealpha" name="gradientcoloronealpha" min="0" max="100" value="0">
         </div>
@@ -284,7 +311,7 @@
           <div><label for="gradientpositiontwo">color two position</label></div>
           <input type="range" id="gradientpositiontwo" name="gradientpositiontwo" min="0" max="100" value="50" data-sizing="%">
         </div>
-        <div class="tool tool-alpha">
+        <div class="tool-alpha">
           <div><label for="gradientcolortwoalpha">color two alpha</label></div>
           <input type="range" id="gradientcolortwoalpha" name="gradientcolortwoalpha" min="0" max="100" value="0">
         </div>
@@ -299,16 +326,13 @@
   <script>
     document.addEventListener("DOMContentLoaded", function()  {
       //INIT
-      const toolInputs = document.querySelectorAll('.tool input');
-
       const inputsR = []
       const inputsL = []
 
-      const initializerL = [["--spacing", "0px"],
-                            ["--base", "#CCFF00"],
+      const initializerL = [["--base", "#CCFF00"],
                             ["--opacity", "100"],
-                            ["--grayscale", "0"],
-                            ["--sepia", "0"],
+                            ["--grayscale", "0%"],
+                            ["--sepia", "0%"],
                             ["--blur", "0px"],
                             ["--saturate", "100%"],
                             ["--contrast","100%"],
@@ -318,79 +342,48 @@
                             ["--gradientcoloronealpha", "0"],
                             ["--gradientpositionone", "0%"],
                             ["--gradientcolortwoalpha", "0"],
-                            ["--gradientpositiontwo", "50%"]]
-      const initializerColor = [["--gradientcolorone", "rgba(225,39,135,0)"],
-                                ["--gradientcolortwo", "rgba(21,192,183,0)"]]
+                            ["--gradientpositiontwo", "50%"],
+                            ["--image", imageDefault ]]
+      const initializerRForExtraction = [["--gradientcolorone", "rgba(225,39,135,0)"],
+                                        ["--gradientcolortwo", "rgba(21,192,183,0)"],
+                                        ["--gradientangle", "0deg"],
+                                        ["--gradientpositionone", "0%"],
+                                        ["--gradientpositiontwo", "50%"]]
+
+      var initializersToExtract = [].concat(...[initializerL, initializerRForExtraction]);
+      const properties = {};
 
       InitR();
       InitL();
-
-      var initializers = [].concat(...[initializerL, initializerR, initializerColor]);
-      const properties = {};
+      InitImage();
 
       //CSS
-      const btnCSS = document.getElementById('btn-css');
+      const btnCss = document.getElementById('btn-css');
+      const wrapperCss = document.getElementById('popup-wrapper');
+      const btnCssClose = document.getElementById('btn-css-close');
 
-      function extractCSS(){
-        initializers.forEach(initializer => {
+      btnCss.addEventListener('click',extractCss);
+      wrapperCss.addEventListener('click', closeCss);
+      btnCssClose.addEventListener('click', closeCss);
+
+      function closeCss(){
+        wrapperCss.style.display = "none";
+      }
+
+      function extractCss(){
+        document.getElementById('popup-wrapper').style.display = "flex";
+        initializersToExtract.forEach(initializer => {
           properties[initializer[0]] = document.documentElement.style.getPropertyValue(initializer[0]);
           if(properties[initializer[0]] != initializer[1]) {
-            console.log(initializer[0].replace("--",".p-"));
+            console.log(document.documentElement.style.getPropertyValue(initializer[0]));
             document.querySelector(initializer[0].replace("--",".p-")).style.display = "inline";
             document.querySelector(initializer[0].replace("--",".c-")).style.display = "inline";
             document.getElementById(initializer[0]).style.display = "inline";
-            document.getElementById(initializer[0]).textContent = properties[initializer[0]];
+            document.getElementById(initializer[0]).textContent = initializer[0] != "--opacity" ? properties[initializer[0]] : Number(properties[initializer[0]])/100;
           }
         })
-
-
-        // initializers.forEach(initializer => {
-        //     if(properties[initializer[0]] != initializer[1]) {
-        //       console.log("update " + initializer[0]);
-        //       document.getElementById(initializer[0]).textContent = properties[initializer[0]];
-        //     }
-        //     else {
-        //       console.log("no update " + initializer[0]);
-        //       console.log(document.getElementById(initializer[0]));
-        //       document.getElementById(initializer[0]).remove();
-        //     }
-        //   }
-        // })
       }
-
-      btnCSS.addEventListener('click',extractCSS);
-      //RANGES
-      function handleUpdate(){
-        const suffix = this.dataset.sizing || '';
-        document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
-      }
-
-      toolInputs.forEach(input => input.addEventListener('change', handleUpdate));
-      toolInputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
-
-      //GRADIENT
-      const toolColors = document.querySelectorAll('.tool-color input');
-      const toolAlphas = document.querySelectorAll('.tool-alpha input');
-
-      toolColors.forEach(input => input.addEventListener('change', handleUpdateColor));
-
-      toolAlphas.forEach(input => input.addEventListener('change', handleUpdateAlpha));
-      toolAlphas.forEach(input => input.addEventListener('mousemove', handleUpdateAlpha));
-
-      function handleUpdateColor(){
-        document.documentElement.style.setProperty(`--${this.name}`, `rgba(${hexToRgb(this.value)}, ${document.getElementById(this.name + "alpha").value/100})`)
-      }
-
-      function handleUpdateAlpha(){
-        document.documentElement.style.setProperty(`--${this.name.replace("alpha", "")}`, `rgba(${hexToRgb(document.getElementById(this.name.replace("alpha", "")).value)}, ${this.value/100})`);
-      }
-
-      function hexToRgb(hex) {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null;
-      }
-
-      //RESET
+      //INIT & RESET
       function InitL() {
         initializerL.forEach(styleline => document.documentElement.style.setProperty(styleline[0], styleline[1]));
         initializerL.forEach(resetInputL);
@@ -414,20 +407,87 @@
         initializerR.forEach(resetInputR);
       }
 
+
       function resetInputR(element, index, array) {
         inputsR[index] = document.getElementById(element[0].replace('--', ''));
         inputsR[index].value = element[1].replace(/deg|[%px]/g, '');
         document.getElementById('gradientcolorone').value = "#E12787";
         document.getElementById('gradientcolortwo').value = "#15C0C1";
       }
+      });
+
+      //RANGES
+      const toolInputs = document.querySelectorAll('.tool input');
+
+      toolInputs.forEach(input => input.addEventListener('change', handleUpdate));
+      toolInputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
+      function handleUpdate(){
+        const suffix = this.dataset.sizing || '';
+        document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+        document.querySelector(`--${this.name}`.replace('--','.p-')).style.display = "none";
+        //set property here ?
+      }
+
+      //GRADIENT
+      const toolColors = document.querySelectorAll('.tool-color input');
+      const toolAlphas = document.querySelectorAll('.tool-alpha input');
+
+      toolColors.forEach(input => input.addEventListener('change', handleUpdateColor));
+
+      toolAlphas.forEach(input => input.addEventListener('change', handleUpdateAlpha));
+      toolAlphas.forEach(input => input.addEventListener('mousemove', handleUpdateAlpha));
+
+      function handleUpdateColor(){
+        document.documentElement.style.setProperty(`--${this.name}`, `rgba(${hexToRgb(this.value)}, ${document.getElementById(this.name + "alpha").value/100})`)
+      }
+
+      function handleUpdateAlpha(){
+        document.documentElement.style.setProperty(`--${this.name.replace("alpha", "")}`, `rgba(${hexToRgb(document.getElementById(this.name.replace("alpha", "")).value)}, ${this.value/100})`);
+      }
+
+      function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null;
+      }
+      //DELETE BACKGROUND IMAGE
+      const btnDeleteBgc = document.getElementById('btn-delete-bgc');
+      const btnAddBgc = document.getElementById('btn-add-bgc');
+      const basePalette = document.getElementById('base');
+
+      btnDeleteBgc.addEventListener('click', deleteBGC);
+
+      function deleteBGC(){
+        basePalette.style.display = "none";
+        btnAddBgc.style.display = "flex";
+        btnDeleteBgc.style.display = "none";
+        document.querySelector('.p-base').classList.add('p-eraser');
+      }
+
+      //ADD BACKGROUND IMAGE
+      btnAddBgc.addEventListener('click', addBGC);
+
+      function addBGC(){
+        basePalette.style.display = "block";
+        btnAddBgc.style.display = "none";
+        btnDeleteBgc.style.display = "flex";
+        document.querySelector('.p-base').classList.remove('p-eraser');
+      }
 
       //IMAGE
-      const inputImage = document.getElementById('input-image');
+      const imageDefault = "https://images.unsplash.com/photo-1504317083653-6843c8aa144f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=066700ab4153be22d484d37ec8be9711&auto=format&fit=crop&w=1489&q=80"
+      const inputImage = document.getElementById('image');
       const imageHolder = document.getElementById('image-holder');
       const imagePrefix = "linear-gradient(var(--gradientangle), var(--gradientcolorone) var(--gradientpositionone), var(--gradientcolortwo) var(--gradientpositiontwo)),"
+      const extractCssImage = document.getElementById("--image")
 
       function updateImage(){
         imageHolder.style.backgroundImage =  imagePrefix + "url('" + inputImage.value + "')";
+      }
+
+      function InitImage() {
+        extractCssImage.textContent = imageDefault;
+        inputImage.value = imageDefault;
       }
 
       //DELETE IMAGE
@@ -438,6 +498,8 @@
       function emptyInputImage(){
         inputImage.value = "";
         imageHolder.style.backgroundImage = imagePrefix + "url('')";
+        extractCssImage.textContent = "";
+        document.querySelector(".p-image").style.display = "none";
       }
 
       //TEXT COLOR
@@ -462,7 +524,7 @@
         toolbarsHorizontal.forEach(toolbar => toolbar.style.backgroundColor = "transparent");
         toolInputs.forEach(toolinput => toolinput.style.backgroundColor = "#0000004d")
       }
-    });
+
 
 
   </script>
