@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS30_6</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 50px;
+      background-color: #FF3344;
+    }
+    input {
+      height: 45px;
+      box-sizing: border-box;
+      padding: 15px;
+      width: 100%;
+      font-size: 18px;
+    }
+    .wrapper {
+      width: 400px;
+      margin: auto;
+    }
+    ul {
+      list-style: none;
+      color: white;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    li {
+      border-bottom: 1px solid #FFCC90;
+      height: 50px;
+      padding: 15px;
+      background-color: #FFCC54;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <input type="text" id="search">
+    <ul id="results">
+    </ul>
+  </div>
+
+<script>
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json'
+
+  const cities = [];
+  const searchInput = document.getElementById('search');
+
+  searchInput.addEventListener('change', displayResult);
+  searchInput.addEventListener('keyup', displayResult);
+
+  fetch(endpoint)
+    .then(blob => blob.json())
+    .then(data => cities.push(...data));
+
+  function matchResult(keyword, list) {
+    const regex = new RegExp(keyword, 'gi');
+    return list.filter(result => result.city.match(regex) || result.state.match(regex));
+  }
+
+  function displayResult() {
+    const results = matchResult(this.value, cities);
+    const resultList = document.getElementById('results');
+    const html = results.map(result => {
+      return `<li>
+                <span>${result.city} - ${result.state}</span>
+                <span>${addCommas(result.population)}</span>
+              </li>`;
+    }
+    ).join('');
+    resultList.innerHTML = html;
+  }
+
+  function addCommas(intNum) {
+    return (intNum + '').replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+  }
+
+</script>
+</body>
+</html>
