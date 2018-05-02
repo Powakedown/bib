@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS30_5</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .panels {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+    }
+    .panel {
+      height: 100vh;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 30px;
+      background-position: center center;
+      -webkit-background-size: cover;
+      background-size: cover;
+      text-align: center;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      /*filter: brightness(60%);*/
+      transition: 0.2s;
+    }
+/*    .panel:hover{
+      filter: brightness(100%);
+    }*/
+    .panel > * {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.02s;
+    }
+    .panel.opened {
+      flex-grow: 5;
+    }
+    .panel > *:first-child { transform: translateY(-100%); }
+    .panel.active > *:first-child { transform: translateY(0%); }
+    .panel > *:last-child { transform: translateY(100%); }
+    .panel.active > *:last-child { transform: translateY(0%); }
+
+    }
+  </style>
+</head>
+<body>
+  <div class="panels">
+    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1513834162622-bcd164ad6a88?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8ce96e06e157ef835873719b681c40ae&auto=format&fit=crop&w=1050&q=80')">
+      <p>panel 1</p>
+      <h1>title 1</h1>
+      <p>bottom 1</p>
+    </div>
+    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1520738585161-c20664fcac4a?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=7a3dd51d31df981a60b852dcd720e3a6&auto=format&fit=crop&w=1050&q=80')">
+      <p>panel 2</p>
+      <h1>title 2</h1>
+      <p>bottom 2</p>
+    </div>
+    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1509815206612-1b56d36ebecb?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=d1fd76e4b33b0597ceef60400978cc2b&auto=format&fit=crop&w=1050&q=80')">
+      <p>panel 1</p>
+      <h1>title 1</h1>
+      <p>bottom 1</p>
+    </div>
+    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1508809571634-ca98bb6625b1?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c4e22cfc0e06ea8b66c398c63a5fb72&auto=format&fit=crop&w=1050&q=80')">
+      <p>panel 1</p>
+      <h1>title 1</h1>
+      <p>bottom 1</p>
+    </div>
+    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1499212908010-a229b65d4058?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=30ee8963ad8111c546dd41977875394f&auto=format&fit=crop&w=1050&q=80')">
+      <p>panel 1</p>
+      <h1>title 1</h1>
+      <p>bottom 1</p>
+    </div>
+  </div>
+
+  <script>
+    const panels = document.querySelectorAll('.panel');
+
+    panels.forEach( panel => panel.addEventListener('click', openPanel));
+    panels.forEach( panel => panel.addEventListener('transitionend', animateFont));
+
+    function openPanel() {
+      panels.forEach( panel => panel == this ? this.classList.toggle('opened') : panel.classList.remove('opened'))
+    }
+
+    function animateFont(e) {
+      console.log("hey");
+      this.classList.toggle('active');
+    }
+
+  </script>
+</body>
+</html>

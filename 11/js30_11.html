@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS30_11</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      color:  white;
+      font-size: 16px;
+      font-family: Arial;
+      background-color: #FFCC33;
+    }
+    .wrapper {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .player {
+      width: 600px;
+      height: 338px;
+      position: relative;
+      border: 1px solid black;
+      overflow: hidden;
+    }
+    .player:hover .commands {
+      transform: translateY(0%);
+    }
+    .video-file {
+      width: 100%;
+    }
+    .commands {
+      width: 100%;
+      background-color: rgba(0,0,0,0.8);
+      height: 60px;
+      z-index: 10;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transition: 0.5s;
+      transform: translateY(100%);
+    }
+    .controls {
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .progress {
+      width: 100%;
+      height: 25px;
+      background-color: rgba(0,0,0,0.3);
+    }
+    .progress-bar {
+      background-color: #FFCC33;
+      height: 25px;
+      width: 2px;
+    }
+    .zap, .backtrack {
+      font-size: 10px;
+    }
+    input[type="range"] {
+      -webkit-appearance: none !important;
+      width: 200px;
+      height: 10px;
+      background-color: #FFCC33;
+      border-radius: 30px;
+      transition: all 0.5s ease;
+      cursor: pointer;
+    }
+    input[type="range"]:focus {
+      outline-width: 0;
+    }
+    button {
+      background-color: transparent;
+      color: white;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="player">
+      <video src="IMG_3671.m4v" class="video-file"></video>
+      <div class="commands">
+        <div class="progress">
+          <div class="progress__filled">
+
+          </div>
+        </div>
+        <div class="controls">
+          <button class="toggle">▶</button>
+          <input type="range" name="volume" class="player__slider" min="0" max="1" step="0.05" value="1">
+          <input type="range" name="playbackRate" class="player__slider" min="0.5" max="2" step="0.1" value="1">
+          <button data-skip="-10" class="zap"><< 10s</button>
+          <button data-skip="25" class="backtrack">25s >></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
