@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS30-3</title>
+  <style>
+    :root {
+      --spacing: 0px;
+      --base: #3A0E71;
+      --opacity: 100;
+      --grayscale: 0;
+      --sepia: 0;
+      --blur: 0px;
+      --saturate: 100%;
+      --contrast: 100%;
+      --brightness: 100%;
+      --huerotation: 0deg;
+      --gradientangle: 0deg;
+      --gradientcoloronealpha: 0;
+      --gradientcolorone: rgba(225,39,135,0);
+      --gradientpositionone: 0%;
+      --gradientcolortwoalpha: 0;
+      --gradientcolortwo: rgba(21,192,183,0);
+      --gradientpositiontwo: 50%;
+    }
+    body {
+      padding: 0;
+      margin: 0;
+      color: white;
+    }
+    .page-parent {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      box-sizing: border-box;
+      background-color: var(--base);
+    }
+    #popup-extract {
+      height: 500px;
+      width: 700px;
+      border-radius: 4px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 3px 8px rgba(0,0,0,0.2);
+      position: absolute;
+      z-index: 100;
+      color: gray;
+    }
+    #popup-extract p {
+      margin-top: 0;
+    }
+    #image-holder {
+      background-color: var(--base);
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      padding: 0;
+      height: 100vh;
+      width: 100%;
+      border: var(--spacing) solid var(--base) ;
+      box-sizing: border-box;
+      opacity: calc(0 + var(--opacity)/100);
+      -webkit-filter: grayscale(var(--grayscale)) sepia(var(--sepia)) blur(var(--blur)) saturate(var(--saturate)) contrast(var(--contrast)) brightness(var(--brightness)) hue-rotate(var(--huerotation));
+    }
+    .tools {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 40px;
+      width: 100%;
+      height: 100vh;
+    }
+    .toolbar {
+      min-height: 100px;
+      padding: 5px;
+      width: 190px;
+      z-index: 100;
+      float: left;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+    .toolbar-horizontal {
+      height: 50px;
+      float: left;
+      padding: 5px;
+      width: calc(100% - 380px);
+      box-sizing: border-box;
+    }
+    .palette {
+      width: 125px;
+      height: 50px;
+    }
+    .tool, .tool-color, .tool-alpha {
+      width: 100%;
+      height: 60px;
+      float: left;
+    }
+    .toolbig {
+      height: 90px;
+    }
+    .button {
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      background-color: #0000004d;
+      float: left;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      margin-right: 5px;
+      transition: 0.1s;
+    }
+    .button:hover {
+      color: black;
+      background-color: #fff;
+      transform: scale(1.1);
+    }
+    .pastille {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: none;
+      background-color: tomato;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+    }
+    input[type="range"] {
+      background-color: #0000004d;
+      -webkit-appearance: listitem;
+      border-radius: 10px;
+      width: 150px;
+    }
+    input.palette {
+      -webkit-appearance: listbox;
+      background-color: #0000004d;
+      border: none;
+      width: 145px;
+    }
+    input[type="text"] {
+      background-color: #0000004d;
+      height: 40px;
+      color: white;
+      width: calc(100% - 50px);
+      border: none;
+      border-radius: 4px;
+      padding: 5px;
+      font-size: 16px;
+      padding-left: 15px;
+      padding-right: 15px;
+      box-sizing: border-box;
+      float: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-parent">
+    <div id="popup-extract">
+      <p>IMAGE CONTAINER CSS :</p>
+      <p>#image-holder {</br>
+        &ensp;&ensp;background-color: var(--base);</br>
+        &ensp;&ensp;background-position: center center;</br>
+        &ensp;&ensp;background-size: cover;</br>
+        &ensp;&ensp;background-repeat: no-repeat;</br>
+        &ensp;&ensp;padding: 0;</br>
+        &ensp;&ensp;height: 100vh;</br>
+        &ensp;&ensp;width: 100%;</br>
+        &ensp;&ensp;border: var(--spacing) solid var(--base);</br>
+        &ensp;&ensp;box-sizing: border-box;</br>
+        &ensp;&ensp;opacity: calc(0 + var(--opacity)/100);</br>
+        &ensp;&ensp;-webkit-filter: grayscale(var(--grayscale)) sepia(var(--sepia)) blur(var(--blur)) saturate(var(--saturate)) contrast(var(--contrast)) brightness(var(--brightness)) hue-rotate(
+        var(--huerotation));</br>
+      }</p>
+    </div>
+    <div id="image-holder" style="background-image: linear-gradient(var(--gradientangle), var(--gradientcolorone) var(--gradientpositionone), var(--gradientcolortwo) var(--gradientpositiontwo)), url('https://images.unsplash.com/photo-1504317083653-6843c8aa144f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=066700ab4153be22d484d37ec8be9711&auto=format&fit=crop&w=1489positiontwo')">
+    </div>
+    <div class="tools">
+      <div class="toolbar">
+        <div class="tool">
+          <div class="button" id="btn-reset-l">↻</div>
+          <div class="button" id="btn-to-white">◎</div>
+          <div class="button" id="btn-to-black">◉</div>
+          <div class="button" id="btn-css">css</div>
+        </div>
+        <div class="tool">
+          <div><label for="sizing">border</label></div>
+          <input type="range" id="spacing" name="spacing" min="0" max="200" value="0" data-sizing="px">
+        </div>
+        <div class="tool">
+          <div><label for="opacity">opacity</label></div>
+          <input type="range" id="opacity" name="opacity" min="0" max="100" value="100">
+        </div>
+        <div class="tool toolbig">
+          <div><label for="base">background-color</label></div>
+          <input type="color" id="base" name="base" value="#3A0E71" class="palette" >
+        </div>
+        <div class="tool">
+          <div><label for="grayscale">grayscale</label></div>
+          <input type="range" id="grayscale" name="grayscale" min="0" max="100" value="0" data-sizing="%">
+        </div>
+        <div class="tool">
+          <div><label for="sepia">sepia</label></div>
+          <input type="range" id="sepia" name="sepia" min="0" max="100" value="0" data-sizing="%">
+        </div>
+         <div class="tool">
+          <div><label for="blur">blur</label></div>
+          <input type="range" id="blur" name="blur" min="0" max="50" value="0" data-sizing="px">
+       </div>
+        <div class="tool">
+          <div><label for="saturate">saturate</label></div>
+          <input type="range" id="saturate" name="saturate" min="0" max="2000" value="100" data-sizing="%">
+        </div>
+        <div class="tool">
+          <div><label for="contrast">contrast</label></div>
+          <input type="range" id="contrast" name="contrast" min="0" max="500" value="100" data-sizing="%">
+        </div>
+        <div class="tool">
+          <div><label for="brightness">brightness</label></div>
+          <input type="range" id="brightness" name="brightness" min="0" max="500" value="100" data-sizing="%">
+        </div>
+        <div class="tool">
+          <div><label for="huerotation">hue rotation</label></div>
+          <input type="range" id="huerotation" name="huerotation" min="0" max="360" value="0" data-sizing="deg">
+        </div>
+      </div>
+
+      <div class="toolbar-horizontal">
+        <div class="button" id="input-image-btn">X</div>
+        <input type="text" id="input-image" placeholder="image url" onkeydown="updateImage()" value="https://images.unsplash.com/photo-1504317083653-6843c8aa144f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=066700ab4153be22d484d37ec8be9711&auto=format&fit=crop&w=1489&q=80" >
+      </div>
+
+      <div class="toolbar">
+        <div class="tool">
+          <div class="button" id="btn_reset-r">↻</div>
+        </div>
+        <div class="tool">
+          <label>linear gradient : </label>
+        </div>
+        <div class="tool">
+          <div><label for="gradientangle">angle</label></div>
+          <input type="range" id="gradientangle" name="gradientangle" min="0" max="360" value="0" data-sizing="deg">
+        </div>
+        <div class="tool">
+          <div><label for="gradientpositionone">color one position</label></div>
+          <input type="range" id="gradientpositionone" name="gradientpositionone" min="0" max="100" value="0" data-sizing="%">
+        </div>
+        <div class="tool tool-alpha">
+          <div><label for="gradientcoloronealpha">color one alpha</label></div>
+          <input type="range" id="gradientcoloronealpha" name="gradientcoloronealpha" min="0" max="100" value="0">
+        </div>
+        <div class="tool-color toolbig">
+          <div><label for="gradientcolorone">color one</label></div>
+          <input type="color" id="gradientcolorone" name="gradientcolorone" value="#E12787" class="palette">
+        </div>
+        <div class="tool">
+          <div><label for="gradientpositiontwo">color two position</label></div>
+          <input type="range" id="gradientpositiontwo" name="gradientpositiontwo" min="0" max="100" value="50" data-sizing="%">
+        </div>
+        <div class="tool tool-alpha">
+          <div><label for="gradientcolortwoalpha">color two alpha</label></div>
+          <input type="range" id="gradientcolortwoalpha" name="gradientcolortwoalpha" min="0" max="100" value="0">
+        </div>
+        <div class="tool-color toolbig">
+          <div><label for="gradientcolortwo">color two</label></div>
+          <input type="color" id="gradientcolortwo" name="gradientcolortwo" value="#15C0C1" class="palette">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    //RANGES
+    const toolInputs = document.querySelectorAll('.tool input');
+
+    function handleUpdate(){
+      const suffix = this.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
+    }
+
+    toolInputs.forEach(input => input.addEventListener('change', handleUpdate));
+    toolInputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
+    //GRADIENT
+    const toolColors = document.querySelectorAll('.tool-color input');
+    const toolAlphas = document.querySelectorAll('.tool-alpha input');
+
+    toolColors.forEach(input => input.addEventListener('change', handleUpdateColor));
+
+    toolAlphas.forEach(input => input.addEventListener('change', handleUpdateAlpha));
+    toolAlphas.forEach(input => input.addEventListener('mousemove', handleUpdateAlpha));
+
+    function handleUpdateColor(){
+      document.documentElement.style.setProperty(`--${this.name}`, `rgba(${hexToRgb(this.value)}, ${document.getElementById(this.name + "alpha").value/100})`)
+    }
+
+    function handleUpdateAlpha(){
+      document.documentElement.style.setProperty(`--${this.name.replace("alpha", "")}`, `rgba(${hexToRgb(document.getElementById(this.name.replace("alpha", "")).value)}, ${this.value/100})`);
+    }
+
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null;
+    }
+
+    //RESET
+    function reInitL() {
+      const initializer = [["--spacing", "0px"], ["--base", "#CCFF00"],["--opacity", "100"], ["--grayscale", "0"], ["--sepia", "0"], ["--blur", "0px"], ["--saturate", "100%"], ["--contrast","100%"], ["--brightness", "100%"], ["--huerotation", "0deg"]]
+      initializer.forEach(styleline => document.documentElement.style.setProperty(styleline[0], styleline[1]));
+      initializer.forEach(resetInputL);
+    }
+
+    function resetInputL(element, index, array) {
+        inputsL[index] = document.getElementById(element[0].replace('--', ''));
+        inputsL[index].value = element[1].replace(/deg|[px%]/g, '');
+    }
+    const opacity = document.getElementById('opacity');
+    const inputsL = []
+    const btnResetL = document.getElementById('btn-reset-l');
+    btnResetL.addEventListener('click', reInitL);
+
+    //RESET GRADIENT
+    const inputsR = []
+    const btnResetR = document.getElementById('btn_reset-r');
+    btnResetR.addEventListener('click', reInitR);
+
+    function reInitR() {
+      const initializer = [["--gradientangle", "0deg"], ["--gradientcoloronealpha", "0"],, ["--gradientpositionone", "0%"], ["--gradientcolortwoalpha", "0"], ["--gradientpositiontwo", "50%"]]
+      initializer.forEach(styleline => document.documentElement.style.setProperty(styleline[0], styleline[1]));
+      document.documentElement.style.setProperty('--gradientcolorone', "rgba(225,39,135,0)");
+      document.documentElement.style.setProperty('--gradientcolortwo', "rgba(21,192,183,0)");
+      initializer.forEach(resetInputR);
+    }
+
+    function resetInputR(element, index, array) {
+      inputsR[index] = document.getElementById(element[0].replace('--', ''));
+      inputsR[index].value = element[1].replace(/deg|[%px]/g, '');
+      document.getElementById('gradientcolorone').value = "#E12787";
+      document.getElementById('gradientcolortwo').value = "#15C0C1";
+    }
+
+    //IMAGE
+    const inputImage = document.getElementById('input-image');
+    const imageHolder = document.getElementById('image-holder');
+    const imagePrefix = "linear-gradient(var(--gradientangle), var(--gradientcolorone) var(--gradientpositionone), var(--gradientcolortwo) var(--gradientpositiontwo)),"
+
+    function updateImage(){
+      imageHolder.style.backgroundImage =  imagePrefix + "url('" + inputImage.value + "')";
+    }
+
+    //DELETE IMAGE
+    const imageDeleteButton = document.getElementById('input-image-btn');
+
+    imageDeleteButton.addEventListener('click', emptyInputImage);
+
+    function emptyInputImage(){
+      inputImage.value = "";
+      imageHolder.style.backgroundImage = imagePrefix + "url('')";
+    }
+
+    //TEXT COLOR
+    const btnToBlack = document.getElementById('btn-to-black');
+    const btnToWhite = document.getElementById('btn-to-white');
+    const toolbars = document.querySelectorAll('.toolbar');
+    const toolbarsHorizontal = document.querySelectorAll('.toolbar-horizontal');
+
+    btnToBlack.addEventListener('click', textToBlack);
+
+    function textToBlack(){
+      toolbars.forEach(toolbar => toolbar.style.backgroundColor = "rgba(0, 0, 0, 0.4)");
+      toolInputs.forEach(toolinput => toolinput.style.backgroundColor = "#0000004d")
+      toolbarsHorizontal.forEach(toolinput => toolinput.style.backgroundColor = "rgba(0, 0, 0, 0.4)")
+    }
+
+    btnToWhite.addEventListener('click', textToWhite);
+
+    function textToWhite(){
+      document.body.style.color = "white";
+      toolbars.forEach(toolbar => toolbar.style.backgroundColor = "transparent");
+      toolbarsHorizontal.forEach(toolbar => toolbar.style.backgroundColor = "transparent");
+      toolInputs.forEach(toolinput => toolinput.style.backgroundColor = "#0000004d")
+    }
+
+    //CSS
+    const btnCSS = document.getElementById('btn-css');
+
+    btnCSS.addEventListener('click',extractCSS);
+
+    function extractCSS(){
+      const base = document.documentElement.style.getPropertyValue('--base');
+
+      // background-color: var(--base);
+    }
+
+
+  </script>
+</body>
+</html>

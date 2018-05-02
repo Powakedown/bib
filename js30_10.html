@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS30_10</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #FFEE33;
+    }
+    .wrapper {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .list {
+      background-color: #fff;
+      border: 1px solid lightgray;
+      width: 500px;
+      min-height: 300px;
+      border-radius: 5px;
+      box-shadow: 5px 8px rgba(0,0,0,0.05);
+    }
+    .list-item {
+      border-bottom: 1px solid lightgray;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .list-item p {
+      padding: 20px;
+      border-left: 1px solid WhiteSmoke;
+      margin: 0;
+      transition: 0.3s;
+      font-family:'helvetica neue';
+    }
+    input[type="checkbox"] {
+      margin: 20px;
+    }
+    input:checked + p {
+      text-decoration: line-through;
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="list">
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+      <div class="list-item">
+        <input type="checkbox">
+        <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, nulla. </p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const checkboxes = document.querySelectorAll('.list-item [type="checkbox"]');
+
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', markAsDone));
+
+  let inBetween = false;
+  let lastChecked;
+
+  function markAsDone(e) {
+    if(e.shiftKey) {
+      checkboxes.forEach(checkbox => {
+        if(checkbox === this || checkbox === lastChecked) {
+          inBetween = !inBetween;
+          console.log(inBetween);
+        }
+        if(inBetween) {
+          checkbox.checked = true;
+        }
+      })
+    }
+    lastChecked = this
+  }
+</script>
+
+</body>
+</html>

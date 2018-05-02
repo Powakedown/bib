@@ -40,9 +40,10 @@
   </style>
 </head>
 <body>
-  <div class="wrapper">
+  <div onClick="matchResult()" lass="wrapper">
     <input type="text" id="search">
     <ul id="results">
+      <li>test</li>
     </ul>
   </div>
 
@@ -51,6 +52,10 @@
 
   const cities = [];
   const searchInput = document.getElementById('search');
+    const resultList = document.getElementById('results');
+
+
+  resultList.style.border = "1px solid red";
 
   searchInput.addEventListener('change', displayResult);
   searchInput.addEventListener('keyup', displayResult);
@@ -66,7 +71,6 @@
 
   function displayResult() {
     const results = matchResult(this.value, cities);
-    const resultList = document.getElementById('results');
     const html = results.map(result => {
       return `<li>
                 <span>${result.city} - ${result.state}</span>
